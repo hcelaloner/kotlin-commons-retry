@@ -1,13 +1,11 @@
 plugins {
-    kotlin("jvm") version "1.3.70"
-    id("org.jetbrains.dokka") version "0.10.1"
+    kotlin("jvm") version "1.4.20"
 }
 
 group = "com.hcelaloner"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
-    jcenter()
     mavenCentral()
 }
 
@@ -16,21 +14,21 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
 
     // Kotlin Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4")
-
-    // Kotlin Coroutines Test
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.4")
+    implementation(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.4.3"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
 
     // Junit 5
-    testImplementation("org.junit.jupiter:junit-jupiter-api:+")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:+")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:+")
+    testImplementation(platform("org.junit:junit-bom:5.7.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
     // AssertJ
-    testImplementation("org.assertj:assertj-core:+")
+    testImplementation("org.assertj:assertj-core:3.19.0")
 
     // MockK
-    testImplementation("io.mockk:mockk:+")
+    testImplementation("io.mockk:mockk:1.11.0")
 }
 
 tasks {
@@ -40,18 +38,7 @@ tasks {
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
     }
-    dokka {
-        outputFormat = "html"
-        outputDirectory = "$buildDir/javadoc"
-    }
     test {
         useJUnitPlatform()
     }
-}
-
-val dokkaJar by tasks.creating(Jar::class) {
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-    description = "Assembles Kotlin docs with Dokka"
-    classifier = "javadoc"
-    from(tasks.dokka)
 }
