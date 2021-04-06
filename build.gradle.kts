@@ -1,4 +1,5 @@
 plugins {
+    `maven-publish`
     kotlin("jvm") version "1.4.20"
 }
 
@@ -40,5 +41,23 @@ tasks {
     }
     test {
         useJUnitPlatform()
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/hcelaloner/kotlin-commons-retry")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        create<MavenPublication>("GitHubPackagesRepository") {
+            from(components.getByName("java"))
+        }
     }
 }
